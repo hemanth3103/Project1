@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "royal-respite"
+    }
+
+    stages {
+        stage('Clone Repo') {
+            steps {
+                git 'https://github.com/hemanth3103/Royal-Respite'  // Replace with your repo
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build("${IMAGE_NAME}")
+                }
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    docker.image("${IMAGE_NAME}").run("-p 3000:3000")
+                }
+            }
+        }
+    }
+}
